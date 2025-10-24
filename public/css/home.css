@@ -1,0 +1,78 @@
+body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #d072d0; 
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #7ed685; 
+        } 
+        .judul h1{
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .judul img{
+            width: 80px; 
+            height: auto;
+        }
+        .judul{
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            gap: 20px; 
+            margin-top: 50px;
+        }
+        .info-terkini{
+            max-width: 800px;      
+            margin: 20px auto;    
+            padding: 20px;
+            background: #f9f9f9;  
+            border-radius: 10px;   
+            gap: 20px; 
+        }
+        .info-terkini h2{
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+            padding: 20px;
+        }
+        .info-terkini p{
+            font-size: 16px;
+            line-height: 1.2;      
+            margin-bottom: 5px;   
+            color: #444;
+            text-align: justify;   
+            padding: 20px;
+        }
+        .info-terkini img{
+            float: right;
+            margin-right: 20px; 
+            margin-left: 20px;
+            width: auto;
+            height: 300px;
+        }
+        .struktur-organisasi h2{
+            text-align: center;
+            gap: 20px; 
+            padding: auto;
+        }
+        .layananumum h1{
+            text-align: center;
+        }
+        .layananumum h2, .layananumum p, .visimisi h3, .visimisi p {
+            padding: 20px;
+        }
+        .visimisi h1{
+            text-align: center
+        }
