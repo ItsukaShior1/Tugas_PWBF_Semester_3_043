@@ -16,12 +16,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($data as $pemilik)
+                @foreach($pemilik as $p)
                     <tr>
-                        <td>{{ $pemilik->idpemilik }}</td>
-                        <td>{{ $pemilik->user->nama ?? '-' }}</td>
-                        <td>{{ $pemilik->no_wa ?? '-' }}</td>
-                        <td>{{ $pemilik->alamat ?? '-' }}</td>
+                        <td>{{ $p->idpemilik }}</td>
+                        <td>{{ $p->user->nama ?? '-' }}</td>
+                        <td>{{ $p->no_wa ?? '-' }}</td>
+                        <td>{{ $p->alamat ?? '-' }}</td>
                     </tr>
                 @endforeach
             </tbody>

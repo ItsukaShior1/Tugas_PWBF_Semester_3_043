@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Tampilkan halaman login.
      */
     public function create(): View
     {
@@ -20,27 +20,47 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Proses login dan redirect sesuai role user.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+        $role = $user?->activeRole();
+
+        if ($role) {
+            switch ($role->nama_role) {
+                case 'Administrator':
+                    return redirect()->route('administrator.dashboard');
+                case 'Dokter':
+                    return redirect()->route('dokter.dashboard');
+                case 'Perawat':
+                    return redirect()->route('perawat.dashboard');
+                case 'Resepsionis':
+                    return redirect()->route('resepsionis.dashboard');
+                case 'Pemilik':
+                    return redirect()->route('pemilik.dashboard');
+                default:
+                    // kalau role-nya gak cocok, ke halaman default admin aja
+                    return redirect()->route('administrator.dashboard');
+            }
+        }
+
+        // fallback kalau user tidak punya role aktif
+        return redirect()->route('administrator.dashboard');
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout user.
      */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+       $request->session()->regenerateToken();
 
         return redirect('/');
     }

@@ -17,13 +17,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($data as $pet)
+                @foreach($pet as $pt)
                     <tr>
-                        <td>{{ $pet->idpet }}</td>
-                        <td>{{ $pet->nama }}</td>
-                        <td>{{ $pet->jenis_kelamin }}</td>
-                        <td>{{ $pet->ras->nama_ras ?? '-' }}</td>
-                        <td>{{ $pet->pemilik->user->nama ?? '-' }}</td>
+                        <td>{{ $pt->idpet }}</td>
+                        <td>{{ $pt->nama }}</td>
+                        <td>{{ $pt->jenis_kelamin }}</td>
+                        <td>{{ $pt->ras->nama_ras ?? '-' }}</td>
+                        <td>{{ $pt->pemilik->user->nama ?? '-' }}</td>
                     </tr>
                 @endforeach
             </tbody>

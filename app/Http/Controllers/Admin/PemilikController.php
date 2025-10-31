@@ -10,7 +10,7 @@ class PemilikController extends Controller
 {
     public function index()
     {
-        $data = Pemilik::all();
+        $pemilik = Pemilik::all();
         return view('admin.pemilik.index', compact('pemilik'));
     }
 }

@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($data as $kategori)
+                @foreach($kategoriKlinis as $kategori)
                     <tr>
                         <td>{{ $kategori->idkategori_klinis }}</td>
                         <td>{{ $kategori->nama_kategori_klinis }}</td>

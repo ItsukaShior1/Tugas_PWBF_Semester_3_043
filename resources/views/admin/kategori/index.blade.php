@@ -14,10 +14,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($data as $kategori)
+                @foreach($kategori as $k)
                     <tr>
-                        <td>{{ $kategori->idkategori }}</td>
-                        <td>{{ $kategori->nama_kategori }}</td>
+                        <td>{{ $k->idkategori }}</td>
+                        <td>{{ $k->nama_kategori }}</td>
                     </tr>
                 @endforeach
             </tbody>

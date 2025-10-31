@@ -10,9 +10,9 @@ class KodeTindakanController extends Controller
     public function index()
     {
         
-        $data = KodeTindakan::with(['kategori', 'kategoriKlinis'])->get();
+        $kodeTindakan = KodeTindakan::with(['kategori', 'kategoriKlinis'])->get();
 
         
-        return view('admin.kode_tindakan.index', compact('data'));
+        return view('admin.kode_tindakan.index', compact('kodeTindakan'));
     }
 }
