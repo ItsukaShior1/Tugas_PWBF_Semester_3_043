@@ -6,20 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    protected $table = 'roles';
     protected $primaryKey = 'idrole';
     public $incrementing = true;
     protected $keyType = 'int';
 
     protected $fillable = ['nama_role'];
 
-    // Relasi ke users melalui role_user
+    // Relasi ke users via role_user
     public function users()
     {
         return $this->belongsToMany(
-            \App\Models\User::class, // model yang dituju
-            'role_user',             // tabel pivot
-            'idrole',                // foreign key di pivot untuk model ini (Role)
-            'iduser'                 // foreign key di pivot untuk model user
+            \App\Models\User::class, 
+            'role_user',             
+            'idrole',                
+            'iduser'                 
         )->withPivot('status');
     }
 }

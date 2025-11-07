@@ -11,11 +11,9 @@ class KategoriKlinis extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nama_kategori_klinis',
-        'keterangan'
+        'nama_kategori_klinis'
     ];
 
-    // Relasi ke Kode Tindakan (One to Many)
     public function kodeTindakan()
     {
         return $this->hasMany(KodeTindakan::class, 'idkategori_klinis', 'idkategori_klinis');

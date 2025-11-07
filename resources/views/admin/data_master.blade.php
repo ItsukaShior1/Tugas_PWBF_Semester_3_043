@@ -11,7 +11,7 @@
     <title>Data Master - {{ $role ? $role->nama_role : '' }}</title>
     <link rel="stylesheet" href="{{ asset('css/admin_page.css') }}">
     <style>
-        /* Tambahan styling ringan khusus Data Master */
+        /* Styling khusus Data Master */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -48,11 +48,26 @@
             font-weight: bold;
             color: inherit;
         }
+        .logout-form {
+            float: right;
+            margin: 0;
+        }
+        .logout-link {
+            background: none;
+            border: none;
+            color: white;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .logout-link:hover {
+            background: #7ed685;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
-        {{-- Link dashboard --}}
+        {{-- Dashboard sesuai role --}}
         @if($role)
             @php
                 $roleRouteMap = [
@@ -67,10 +82,10 @@
             <a href="{{ route($dashboardRoute) }}">Dashboard</a>
         @endif
 
-        {{-- Menu Data Master aktif --}}
+        {{-- Menu aktif --}}
         <a href="{{ route('admin.data.master') }}" style="font-weight: bold; color: #7ed685;">Data Master</a>
 
-        {{-- Logout --}}
+        {{-- Tombol Logout --}}
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <button type="submit" class="logout-link">Logout</button>
@@ -82,6 +97,7 @@
         <p style="text-align:center;">Pilih data master yang ingin dikelola:</p>
 
         <div class="menu-list">
+            <div class="menu-card"><a href="{{ route('admin.user.index') }}">👥 Data User</a></div>
             <div class="menu-card"><a href="{{ route('admin.jenis.index') }}">🐾 Jenis Hewan</a></div>
             <div class="menu-card"><a href="{{ route('admin.ras.index') }}">🐶 Ras Hewan</a></div>
             <div class="menu-card"><a href="{{ route('admin.kategori.index') }}">📂 Kategori</a></div>
