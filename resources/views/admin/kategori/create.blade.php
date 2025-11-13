@@ -7,7 +7,6 @@
     <h2>➕ Tambah Kategori Baru</h2>
     <p>Isi form di bawah untuk menambahkan kategori baru ke dalam sistem.</p>
 
-    {{-- Notifikasi error validasi --}}
     @if ($errors->any())
         <div style="color: red; margin-bottom:10px;">
             <ul>

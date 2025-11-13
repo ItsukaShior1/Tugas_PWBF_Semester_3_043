@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="navbar">
-        {{-- Link ke Dashboard sesuai role --}}
+       
         @if($role)
             @php
                 $roleRouteMap = [
@@ -28,12 +28,12 @@
             <a href="{{ route($dashboardRoute) }}" style="font-weight: bold;">Dashboard</a>
         @endif
 
-        {{-- Hanya Administrator yang punya akses ke Data Master --}}
+
         @if($role && $role->nama_role === 'Administrator')
             <a href="{{ route('admin.data.master') }}">Data Master</a>
         @endif
 
-        {{-- Tombol Logout --}}
+    
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <button type="submit" class="logout-link">Logout</button>
@@ -44,7 +44,6 @@
         <h2>Hallo {{ $user->nama }}, Anda login sebagai {{ $role ? $role->nama_role : 'User' }}</h2>
         <p>Selamat datang di halaman {{ $role ? $role->nama_role : '' }}!</p>
 
-        {{-- Kalau Administrator, tampilkan shortcut --}}
         @if($role && $role->nama_role === 'Administrator')
             <div style="margin-top: 30px;">
                 <p>📦 Anda dapat mengelola Data Master di menu atas atau klik tombol di bawah ini:</p>

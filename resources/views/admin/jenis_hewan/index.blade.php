@@ -7,20 +7,17 @@
     <h2>🐾 Data Jenis Hewan</h2>
     <p>Daftar semua jenis hewan yang tersedia di sistem.</p>
 
-    {{-- Pesan sukses --}}
     @if(session('success'))
         <div style="background:#e7ffe7; border-left:4px solid #28a745; padding:10px; margin-bottom:15px; color:#1d6f32;">
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- Tombol Tambah --}}
     <a href="{{ route('admin.jenis.create') }}" 
        style="background:#7ed685; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">
        + Tambah Jenis Hewan
     </a>
 
-    {{-- Tabel --}}
     <table class="data-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
         <thead>
             <tr style="background-color:#d072d0; color:white;">
@@ -35,15 +32,14 @@
                     <td style="padding:8px;">{{ $jenis->idjenis_hewan }}</td>
                     <td style="padding:8px;">{{ $jenis->nama_jenis_hewan }}</td>
                     <td style="padding:8px;">
-                        {{-- Tombol Edit --}}
+                       
                         <button 
                             type="button" 
                             onclick="openEditModal({{ $jenis->idjenis_hewan }}, '{{ $jenis->nama_jenis_hewan }}')" 
                             style="color:#007bff; background:none; border:none; cursor:pointer;">
                             Edit
                         </button> |
-                        
-                        {{-- Tombol Hapus --}}
+                     
                         <form action="{{ route('admin.jenis.destroy', $jenis->idjenis_hewan) }}" 
                               method="POST" style="display:inline;">
                             @csrf

@@ -7,7 +7,6 @@
     <h2>➕ Tambah Jenis Hewan Baru</h2>
     <p>Isi form di bawah untuk menambahkan jenis hewan baru.</p>
 
-    {{-- Pesan Error Validasi --}}
     @if ($errors->any())
         <div style="background:#ffe6e6; border-left:4px solid red; padding:10px; margin-bottom:15px; color:#b30000;">
             <ul style="margin:0; padding-left:20px;">
@@ -18,14 +17,12 @@
         </div>
     @endif
 
-    {{-- Pesan Sukses (kalau redirect dari store gagal/sukses) --}}
     @if(session('success'))
         <div style="background:#e7ffe7; border-left:4px solid #28a745; padding:10px; margin-bottom:15px; color:#1d6f32;">
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- Form Input --}}
     <form action="{{ route('admin.jenis.store') }}" method="POST" style="margin-top:15px;">
         @csrf
 

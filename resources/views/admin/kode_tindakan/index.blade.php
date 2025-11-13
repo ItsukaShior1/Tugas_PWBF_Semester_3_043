@@ -7,7 +7,6 @@
     <h2>🧾 Data Kode Tindakan Terapi</h2>
     <p>Daftar tindakan dan terapi yang tersedia.</p>
 
-    {{-- Notifikasi sukses --}}
     @if(session('success'))
         <div style="color:green; margin-bottom:10px;">✅ {{ session('success') }}</div>
     @endif

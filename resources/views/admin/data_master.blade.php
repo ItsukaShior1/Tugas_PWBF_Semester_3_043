@@ -11,7 +11,7 @@
     <title>Data Master - {{ $role ? $role->nama_role : '' }}</title>
     <link rel="stylesheet" href="{{ asset('css/admin_page.css') }}">
     <style>
-        /* Styling khusus Data Master */
+    
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -67,7 +67,7 @@
 </head>
 <body>
     <div class="navbar">
-        {{-- Dashboard sesuai role --}}
+      
         @if($role)
             @php
                 $roleRouteMap = [
@@ -82,10 +82,8 @@
             <a href="{{ route($dashboardRoute) }}">Dashboard</a>
         @endif
 
-        {{-- Menu aktif --}}
         <a href="{{ route('admin.data.master') }}" style="font-weight: bold; color: #7ed685;">Data Master</a>
 
-        {{-- Tombol Logout --}}
         <form method="POST" action="{{ route('logout') }}" class="logout-form">
             @csrf
             <button type="submit" class="logout-link">Logout</button>
