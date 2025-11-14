@@ -1,113 +1,174 @@
-@extends('layouts.admin_layout')
+@extends('layouts.lte.main') 
 
-@section('title', 'Data Kategori')
+@section('title', 'Data Kategori') 
 
-@section('content')
-<div class="container">
-    <h2>📂 Data Kategori</h2>
-    <p>Daftar kategori tindakan atau pemeriksaan.</p>
+@section('content') 
 
-    {{-- Notifikasi sukses --}}
-    @if(session('success'))
-        <div style="color: green; margin-bottom: 10px;">
-            ✅ {{ session('success') }}
-        </div>
-    @endif
-
-    {{-- Tombol tambah kategori --}}
-    <a href="{{ route('admin.kategori.create') }}" 
-       style="background:#7ed685; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">
-       + Tambah Kategori
-    </a>
-
-    <table class="data-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
-        <thead>
-            <tr style="background-color:#d072d0; color:white;">
-                <th style="padding:8px;">ID</th>
-                <th style="padding:8px;">Nama Kategori</th>
-                <th style="padding:8px;">Keterangan</th>
-                <th style="padding:8px;">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($kategori as $k)
-                <tr style="border-bottom:1px solid #ddd;">
-                    <td style="padding:8px;">{{ $k->idkategori }}</td>
-                    <td style="padding:8px;">{{ $k->nama_kategori }}</td>
-                    <td style="padding:8px;">{{ $k->keterangan ?? '-' }}</td>
-                    <td style="padding:8px;">
-                        {{-- Tombol Edit --}}
-                        <button onclick="openEditModal('{{ $k->idkategori }}', '{{ $k->nama_kategori }}', '{{ $k->keterangan ?? '' }}')"
-                                style="background:#4c8bf5; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">
-                            Edit
-                        </button>
-
-                        {{-- Tombol Hapus --}}
-                        <form action="{{ route('admin.kategori.destroy', $k->idkategori) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                    onclick="return confirm('Yakin ingin menghapus kategori ini?')"
-                                    style="background:#e05c5c; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">
-                                Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" style="text-align:center; padding:12px; color:#999;">
-                        Belum ada data kategori.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    <div style="margin-top:20px;">
-        <a href="{{ route('admin.data.master') }}" 
-           style="background:#aaa; color:white; padding:10px 16px; border-radius:8px; text-decoration:none;">
-           ← Kembali ke Data Master
-        </a>
-    </div>
-</div>
-
-{{-- Modal Edit --}}
-<div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
-    <div style="background:white; padding:20px; border-radius:10px; width:400px;">
-        <h3>✏️ Edit Kategori</h3>
-        <form id="editForm" method="POST">
-            @csrf
-            @method('PUT')
-
-            <label for="edit_nama_kategori">Nama Kategori:</label><br>
-            <input type="text" id="edit_nama_kategori" name="nama_kategori" required
-                   style="width:100%; padding:8px; margin-bottom:10px;"><br>
-
-            <div style="text-align:right;">
-                <button type="button" onclick="closeEditModal()"
-                        style="background:#ccc; color:black; padding:8px 12px; border:none; border-radius:5px;">
-                    Batal
-                </button>
-                <button type="submit"
-                        style="background:#7ed685; color:white; padding:8px 12px; border:none; border-radius:5px;">
-                    Simpan
-                </button>
+<main class="app-main">
+    <div class="app-content">
+        <div class="container">
+            
+            <div class="content-header">
+                <div class="container">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Kategori</h1> 
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end"> 
+                                <li class="breadcrumb-item"><a href="{{ route('admin.data.master') }}">Master Data</a></li> 
+                                <li class="breadcrumb-item active" aria-current="page">Kategori</li> 
+                            </ol>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tabel Data Kategori</h3>
+                            <div class="card-tools">
+                                 <a href="{{ route('admin.kategori.create') }}" class="btn btn-sm btn-success">
+                                     <i class="bi bi-plus-lg"></i> Tambah Kategori
+                                 </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">ID</th> 
+                                        <th>Nama Kategori</th>
+                                        <th>Keterangan</th>
+                                        <th style="width: 120px">Aksi</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($kategori as $k) 
+                                    <tr>
+                                        <td>{{ $k->idkategori }}</td> 
+                                        <td>{{ $k->nama_kategori }}</td>
+                                        <td>{{ $k->keterangan ?? '-' }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary btn-edit-kategori"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#editKategoriModal"
+                                                    data-id="{{ $k->idkategori }}"
+                                                    data-nama="{{ $k->nama_kategori }}"
+                                                    data-keterangan="{{ $k->keterangan ?? '' }}">
+                                                Edit
+                                            </button>
+                                            
+                                            <form action="{{ route('admin.kategori.destroy', $k->idkategori) }}" 
+                                                    method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                         onclick="return confirm('Anda yakin ingin menghapus data ini?')"> 
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">Belum ada data kategori.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer clearfix">
+                            {{-- Jika menggunakan paginate(), tampilkan links di sini --}}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a href="{{ route('admin.data.master') }}" 
+                            class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Kembali ke Data Master
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{{-- MODAL EDIT BOOTSTRAP --}}
+<div class="modal fade" id="editKategoriModal" tabindex="-1" aria-labelledby="editKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editKategoriModalLabel">✏️ Edit Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editKategoriForm" method="POST" action=""> 
+                @csrf
+                @method('PUT') 
+                <div class="modal-body">
+                    {{-- Nama Kategori --}}
+                    <div class="mb-3">
+                        <label for="edit_nama_kategori" class="form-label">Nama Kategori</label>
+                        <input type="text" class="form-control" id="edit_nama_kategori" name="nama_kategori" required>
+                    </div>
+                    
+                    {{-- Keterangan --}}
+                    <div class="mb-3">
+                        <label for="edit_keterangan" class="form-label">Keterangan (Opsional)</label>
+                        <textarea class="form-control" id="edit_keterangan" name="keterangan" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<script>
-    function openEditModal(id, nama) {
-        document.getElementById('editForm').action = '/administrator/kategori/' + id + '/update';
-        document.getElementById('edit_nama_kategori').value = nama;
-        document.getElementById('editModal').style.display = 'flex';
-    }
-
-    function closeEditModal() {
-        document.getElementById('editModal').style.display = 'none';
-    }
-</script>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        const form = document.getElementById('editKategoriForm');
+        const inputNama = document.getElementById('edit_nama_kategori');
+        const inputKeterangan = document.getElementById('edit_keterangan');
+
+        const updateRouteTemplate = "{{ route('admin.kategori.update', ':id') }}";
+
+        document.querySelectorAll('.btn-edit-kategori').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const nama = this.getAttribute('data-nama');
+                const keterangan = this.getAttribute('data-keterangan');
+                
+                inputNama.value = nama;
+                inputKeterangan.value = keterangan;
+
+                form.action = updateRouteTemplate.replace(':id', id);
+            });
+        });
+    });
+</script>
+@endpush

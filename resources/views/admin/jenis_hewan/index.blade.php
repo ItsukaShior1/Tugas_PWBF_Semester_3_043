@@ -1,129 +1,156 @@
-@extends('layouts.admin_layout')
+@extends('layouts.lte.main') 
 
-@section('title', 'Data Jenis Hewan')
+@section('title', 'Data Jenis Hewan') 
 
-@section('content')
-<div class="container">
-    <h2>🐾 Data Jenis Hewan</h2>
-    <p>Daftar semua jenis hewan yang tersedia di sistem.</p>
+@section('content') 
 
-    @if(session('success'))
-        <div style="background:#e7ffe7; border-left:4px solid #28a745; padding:10px; margin-bottom:15px; color:#1d6f32;">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <a href="{{ route('admin.jenis.create') }}" 
-       style="background:#7ed685; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">
-       + Tambah Jenis Hewan
-    </a>
-
-    <table class="data-table" style="width:100%; border-collapse:collapse; margin-top:20px;">
-        <thead>
-            <tr style="background-color:#d072d0; color:white;">
-                <th style="padding:8px;">ID</th>
-                <th style="padding:8px;">Nama Jenis Hewan</th>
-                <th style="padding:8px;">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($jenisHewan as $jenis)
-                <tr style="border-bottom:1px solid #ddd;">
-                    <td style="padding:8px;">{{ $jenis->idjenis_hewan }}</td>
-                    <td style="padding:8px;">{{ $jenis->nama_jenis_hewan }}</td>
-                    <td style="padding:8px;">
-                       
-                        <button 
-                            type="button" 
-                            onclick="openEditModal({{ $jenis->idjenis_hewan }}, '{{ $jenis->nama_jenis_hewan }}')" 
-                            style="color:#007bff; background:none; border:none; cursor:pointer;">
-                            Edit
-                        </button> |
-                     
-                        <form action="{{ route('admin.jenis.destroy', $jenis->idjenis_hewan) }}" 
-                              method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                style="background:none; border:none; color:red; cursor:pointer;"
-                                onclick="return confirm('Hapus jenis hewan ini?')">
-                                Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3" style="text-align:center; color:#999; padding:10px;">
-                        Belum ada data jenis hewan.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    <div style="margin-top:20px;">
-        <a href="{{ route('admin.data.master') }}" 
-           style="background:#7ed685; color:white; padding:10px 16px; border-radius:8px; text-decoration:none;">
-           ← Kembali ke Data Master
-        </a>
-    </div>
-</div>
-
-<div id="editModal" 
-     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-            background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
-    <div style="background:white; padding:20px; border-radius:10px; width:400px; position:relative;">
-        <h3 style="margin-bottom:10px;">✏️ Edit Jenis Hewan</h3>
-        <form id="editForm" method="POST">
-            @csrf
-            @method('PUT')
-            <label for="edit_nama_jenis_hewan">Nama Jenis Hewan:</label><br>
-            <input type="text" id="edit_nama_jenis_hewan" name="nama_jenis_hewan" 
-                   style="width:100%; padding:8px; border:1px solid #ccc; border-radius:5px; margin-top:5px;" required><br><br>
+<main class="app-main">
+    <div class="app-content">
+        <div class="container">
             
-            <div style="text-align:right;">
-                <button type="button" onclick="closeEditModal()" 
-                        style="background:#aaa; color:white; padding:8px 12px; border:none; border-radius:5px; margin-right:5px;">
-                    Batal
-                </button>
-                <button type="submit" 
-                        style="background:#d072d0; color:white; padding:8px 12px; border:none; border-radius:5px;">
-                    Simpan
-                </button>
+            <div class="content-header">
+                <div class="container">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Jenis Hewan</h1> 
+                        </div><div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-end"> 
+                                <li class="breadcrumb-item"><a href="#">Master Data</a></li> 
+                                <li class="breadcrumb-item active" aria-current="page">Jenis Hewan</li> 
+                            </ol>
+                        </div></div></div></div>
+            <div class="row">
+                <div class="col-md-12">
+
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tabel Data Jenis Hewan</h3>
+                            <div class="card-tools">
+                                 <a href="{{ route('admin.jenis.create') }}" class="btn btn-sm btn-success">
+                                     <i class="bi bi-plus-lg"></i> Tambah Jenis Hewan
+                                 </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+     
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+       
+                                        <th>#</th> 
+                                        <th>Nama Jenis Hewan</th>
+                          
+                                        <th style="width: 120px">Aksi</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($jenisHewan as $index => $jenis) 
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td> 
+                                        <td>{{ $jenis->nama_jenis_hewan }}</td>
+                                        <td>
+                                          
+                                            <button type="button" class="btn btn-sm btn-primary btn-edit-jenis"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#editJenisHewanModal"
+                                                    data-id="{{ $jenis->idjenis_hewan }}"
+                                                    data-nama="{{ $jenis->nama_jenis_hewan }}">
+                                                Edit
+                                            </button>
+                                            
+                                            <form action="{{ route('admin.jenis.destroy', $jenis->idjenis_hewan) }}" 
+                                                    method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                       
+                                                <button type="submit" class="btn btn-sm btn-danger"
+                                                         onclick="return confirm('Anda yakin ingin menghapus data ini?')"> 
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="3" class="text-center">Belum ada data jenis hewan.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-footer clearfix">
+ 
+                        </div>
+                    </div>
+                    </div>
             </div>
-        </form>
-        
-        <button onclick="closeEditModal()" 
-                style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:18px; cursor:pointer;">
-            ✖
-        </button>
+            </div></div>
+</main>
+
+
+<div class="modal fade" id="editJenisHewanModal" tabindex="-1" aria-labelledby="editJenisHewanModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editJenisHewanModalLabel">Edit Jenis Hewan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+    
+            <form id="editJenisHewanForm" method="POST" action=""> 
+                @csrf
+                @method('PUT') 
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_nama_jenis_hewan" class="form-label">Nama Jenis Hewan</label>
+       
+                        <input type="text" class="form-control" id="edit_nama_jenis_hewan" name="nama_jenis_hewan" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<script>
-    function openEditModal(id, nama) {
-        const modal = document.getElementById('editModal');
-        const form = document.getElementById('editForm');
-        const input = document.getElementById('edit_nama_jenis_hewan');
-
-        input.value = nama;
-
-        form.action = `/administrator/jenis-hewan/${id}/update`;
-
-        modal.style.display = 'flex';
-    }
-
-    function closeEditModal() {
-        const modal = document.getElementById('editModal');
-        modal.style.display = 'none';
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById('editModal');
-        if (event.target === modal) {
-            closeEditModal();
-        }
-    };
-</script>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const form = document.getElementById('editJenisHewanForm');
+        const inputNama = document.getElementById('edit_nama_jenis_hewan');
+
+        const updateRouteTemplate = "{{ route('admin.jenis.update', ':id') }}";
+
+        document.querySelectorAll('.btn-edit-jenis').forEach(button => {
+            button.addEventListener('click', function() {
+
+                const id = this.getAttribute('data-id');
+                const nama = this.getAttribute('data-nama');
+      
+                inputNama.value = nama;
+
+                form.action = updateRouteTemplate.replace(':id', id);
+            });
+        });
+    });
+</script>
+@endpush

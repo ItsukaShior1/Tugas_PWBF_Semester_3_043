@@ -5,9 +5,9 @@
     <div class="app-wrapper">
         @include('layouts.lte.navbar')
         @include('layouts.lte.sidebar')
-            <main class="app-main">
-                @yield('content')
-            </main>
+        <main class="app-main">
+            @yield('content')
+        </main>
         @include('layouts.lte.footer')
     </div>
       <script
@@ -25,7 +25,8 @@
       crossorigin="anonymous"
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="./js/adminlte.js"></script>
+    {{-- ⭐ KESALAHAN TERBESAR ADA DI SINI. Ganti './js/adminlte.js' menjadi asset('assets/js/adminlte.js') --}}
+    <script src="{{ asset('assets/js/adminlte.js') }}"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -174,7 +175,7 @@
           min: 0,
         },
         colors: ['#DCE6EC'],
-      };
+        };
 
       const sparkline1 = new ApexCharts(document.querySelector('#sparkline-1'), option_sparkline1);
       sparkline1.render();
