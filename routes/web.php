@@ -16,17 +16,14 @@ use App\Http\Controllers\Admin\{
     UserController
 };
 
-// ✅ Load semua route autentikasi (login, register, dll) dulu
 require __DIR__.'/auth.php';
 
-// ========================
-// 🌐 Public Routes
-// ========================
+
 Route::get('/', [SiteController::class, 'homeindex'])->name('home');
 Route::get('/layanan', [SiteController::class, 'layananindex'])->name('layanan');
 Route::get('/kontak', [SiteController::class, 'kontakindex'])->name('kontak');
 
-// Cek koneksi DB
+
 Route::get('/cek-koneksi', function () {
     try {
         DB::connection()->getPdo();
@@ -37,9 +34,7 @@ Route::get('/cek-koneksi', function () {
     }
 });
 
-// ========================
-// 🔐 Authenticated Routes
-// ========================
+
 Route::middleware('auth')->group(function () {
 
     // Dashboard per role
@@ -49,13 +44,11 @@ Route::middleware('auth')->group(function () {
     Route::get('resepsionis/dashboard', fn() => view('resepsionis.dashboard', ['user' => Auth::user()]))->name('resepsionis.dashboard');
     Route::get('pemilik/dashboard', fn() => view('pemilik.dashboard', ['user' => Auth::user()]))->name('pemilik.dashboard');
 
-    // ========================
-    // 🧩 Administrator Routes
-    // ========================
+    
     Route::prefix('administrator')->name('admin.')->group(function () {
         Route::view('/data-master', 'admin.data_master')->name('data.master');
 
-        // 🐾 CRUD Jenis Hewan
+        //CRUD Jenis Hewan
         Route::get('/jenis-hewan', [JenisHewanController::class, 'index'])->name('jenis.index');
         Route::get('/jenis-hewan/create', [JenisHewanController::class, 'create'])->name('jenis.create');
         Route::post('/jenis-hewan/store', [JenisHewanController::class, 'store'])->name('jenis.store');
@@ -90,6 +83,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/kategori-klinis/{id}/update', [KategoriKlinisController::class, 'update'])->name('kategoriKlinis.update');
         Route::delete('/kategori-klinis/{id}/delete', [KategoriKlinisController::class, 'destroy'])->name('kategoriKlinis.destroy');
 
+        // CRUD Pet
+        Route::get('/pet', [PetController::class, 'index'])->name('pet.index');
+        Route::get('/pet/create', [PetController::class, 'create'])->name('pet.create');
+        Route::post('/pet/store', [PetController::class, 'store'])->name('pet.store');
+        Route::put('/pet/{id}/update', [PetController::class, 'update'])->name('pet.update');
+        Route::delete('/pet/{id}/delete', [PetController::class, 'destroy'])->name('pet.destroy');
         // CRUD Kode Tindakan
         Route::get('/kode-tindakan', [KodeTindakanController::class, 'index'])->name('kode.index');
         Route::get('/kode-tindakan/create', [KodeTindakanController::class, 'create'])->name('kode.create');
