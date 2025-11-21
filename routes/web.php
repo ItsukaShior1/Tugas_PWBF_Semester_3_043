@@ -13,7 +13,9 @@ use App\Http\Controllers\Admin\{
     KodeTindakanController,
     PetController,
     PemilikController,
-    UserController
+    UserController,
+    DokterController,
+    PerawatController
 };
 
 require __DIR__.'/auth.php';
@@ -76,6 +78,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/kategori/store', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('/kategori/{id}/update', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/kategori/{id}/delete', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+        
+        Route::get('/perawat', [PerawatController::class, 'index'])->name('perawat.index');
+        Route::post('/perawat/store', [PerawatController::class, 'store'])->name('perawat.store');
+        Route::put('/perawat/{id}/update', [PerawatController::class, 'update'])->name('perawat.update');
+        Route::delete('/perawat/{id}/delete', [PerawatController::class, 'destroy'])->name('perawat.destroy');
 
         Route::get('/kategori-klinis', [KategoriKlinisController::class, 'index'])->name('kategoriKlinis.index');
         Route::get('/kategori-klinis/create', [KategoriKlinisController::class, 'create'])->name('kategoriKlinis.create');
@@ -101,6 +108,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/pemilik/store', [PemilikController::class, 'store'])->name('pemilik.store');
         Route::put('/pemilik/{id}/update', [PemilikController::class, 'update'])->name('pemilik.update');
         Route::delete('/pemilik/{id}/delete', [PemilikController::class, 'destroy'])->name('pemilik.destroy');
+        
+        Route::get('/dokter', [DokterController::class, 'index'])->name('dokter.index');
+        Route::post('/dokter/store', [DokterController::class, 'store'])->name('dokter.store');
+        Route::put('/dokter/{id}/update', [DokterController::class, 'update'])->name('dokter.update');
+        Route::delete('/dokter/{id}/delete', [DokterController::class, 'destroy'])->name('dokter.destroy');
 
        
         Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');

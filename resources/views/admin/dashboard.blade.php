@@ -1,58 +1,80 @@
 @php
-    use Illuminate\Support\Facades\Auth;
-    $user = Auth::user();
-    $role = $user->activeRole();
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Dokter;
+
+// Ambil data user dan role
+$user = Auth::user();
+$role = $user->activeRole();
+
+// Default data dashboard
+$totalUsers = 0;
+$totalDokters = 0;
+
+
+if ($role && $role->nama_role === 'Administrator') {
+    try {
+        $totalUsers = User::count() ?? 0;
+        $totalDokters = Dokter::count() ?? 0;
+
+    } catch (\Exception $e) {
+        $totalUsers = 'N/A';
+        $totalDokters = 'N/A';
+
+    }
+}
 @endphp
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard {{ $role ? $role->nama_role : '' }}</title>
-    <link rel="stylesheet" href="{{ asset('css/admin_page.css') }}">
-</head>
-<body>
-    <div class="navbar">
-       
-        @if($role)
-            @php
-                $roleRouteMap = [
-                    'Administrator' => 'administrator.dashboard',
-                    'Dokter'       => 'dokter.dashboard',
-                    'Perawat'      => 'perawat.dashboard',
-                    'Resepsionis'  => 'resepsionis.dashboard',
-                    'Pemilik'      => 'pemilik.dashboard',
-                ];
-                $dashboardRoute = $roleRouteMap[$role->nama_role] ?? '#';
-            @endphp
-            <a href="{{ route($dashboardRoute) }}" style="font-weight: bold;">Dashboard</a>
-        @endif
+@extends('layouts.lte.main')
 
+@section('title', 'Dashboard ' . ($role ? $role->nama_role : 'User'))
 
-        @if($role && $role->nama_role === 'Administrator')
-            <a href="{{ route('admin.data.master') }}">Data Master</a>
-        @endif
+@section('content')
 
-    
-        <form method="POST" action="{{ route('logout') }}" class="logout-form">
-            @csrf
-            <button type="submit" class="logout-link">Logout</button>
-        </form>
-    </div>
+<div class="container-fluid">
 
-    <div class="content">
-        <h2>Hallo {{ $user->nama }}, Anda login sebagai {{ $role ? $role->nama_role : 'User' }}</h2>
-        <p>Selamat datang di halaman {{ $role ? $role->nama_role : '' }}!</p>
+    <h2 class="fw-bold mb-3">
+        Halo {{ $user->nama }}, Anda login sebagai {{ $role->nama_role }}
+    </h2>
 
-        @if($role && $role->nama_role === 'Administrator')
-            <div style="margin-top: 30px;">
-                <p>📦 Anda dapat mengelola Data Master di menu atas atau klik tombol di bawah ini:</p>
-                <a href="{{ route('admin.data.master') }}"
-                   style="display:inline-block; background:#d072d0; color:white; padding:10px 18px; border-radius:8px; text-decoration:none;">
-                   ➜ Buka Data Master
-                </a>
+    <p class="text-muted mb-4">Selamat datang di halaman dashboard {{ $role->nama_role }}!</p>
+
+    @if($role && $role->nama_role === 'Administrator')
+
+    <div class="row">
+
+        <!-- Total Pengguna -->
+        <div class="col-md-4">
+            <div class="card text-bg-primary">
+                <div class="card-body">
+                    <h3>{{ $totalUsers }}</h3>
+                    <p>Total Pengguna</p>
+                </div>
             </div>
-        @endif
+        </div>
+
+        <!-- Total Dokter -->
+        <div class="col-md-4">
+            <div class="card text-bg-success">
+                <div class="card-body">
+                    <h3>{{ $totalDokters }}</h3>
+                    <p>Total Dokter</p>
+                </div>
+            </div>
+        </div>
+
+      
+
     </div>
-</body>
-</html>
+
+    <div class="mt-4">
+        <a href="{{ route('admin.data.master') }}" class="btn btn-primary">
+            Kelola Data Master
+        </a>
+    </div>
+
+    @endif
+
+</div>
+
+@endsection
