@@ -1,0 +1,54 @@
+<?php
+
+// database/migrations/..._create_rekam_medis_table.php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('rekam_medis', function (Blueprint $table) {
+            $table->id('idrekam_medis'); // idrekam_medis INT (Primary Key)
+            
+            // Kolom dari ERD
+            $table->timestamp('created_at')->useCurrent(); // created_at TIMESTAMP
+            $table->string('anamnesa', 1000)->nullable();
+            $table->string('temuan_klinis', 1000)->nullable();
+            $table->string('diagnosa', 1000)->nullable();
+            
+            
+            $table->unsignedBigInteger('iddokter_pemeriksa');
+            
+            // Kolom dari ERD: idreservasi_dokter INT (Foreign Key ke temu_dokter)
+            $table->unsignedBigInteger('idreservasi_dokter'); 
+
+            // Foreign Key Constraints
+            $table->foreign('iddokter_pemeriksa')
+                  ->references('iddokter') // Merujuk ke Primary Key di tabel dokters
+                  ->on('dokter')
+                  ->onDelete('restrict'); 
+
+            $table->foreign('idreservasi_dokter')
+                  ->references('idreservasi_dokter') // Merujuk ke Primary Key di tabel temu_dokter
+                  ->on('temu_dokter')
+                  ->onDelete('restrict');
+
+            $table->softDeletes(); // Opsional: jika Anda ingin menggunakan Soft Deletes
+            // $table->timestamps(); // Tidak diperlukan karena sudah ada created_at
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('rekam_medis');
+    }
+};

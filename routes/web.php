@@ -17,6 +17,16 @@ use App\Http\Controllers\Admin\{
     DokterController,
     PerawatController
 };
+use App\Http\Controllers\Dokter\{RekamMedisDokterController
+    ,DetailRekamMedisController,
+    DataPasienDokterController    
+};
+use App\Http\Controllers\Resepsionis\{
+    DashboardResepsionisController,
+    PemilikResepsionisController,
+    PetResepsionisController,
+    TemuDokterController
+};
 
 require __DIR__.'/auth.php';
 
@@ -40,14 +50,57 @@ Route::get('/cek-koneksi', function () {
 Route::middleware('auth')->group(function () {
 
     // Dashboard per role
-    Route::get('administrator/dashboard', fn() => view('admin.dashboard', ['user' => Auth::user()]))->name('administrator.dashboard');
-    Route::get('dokter/dashboard', fn() => view('dokter.dashboard', ['user' => Auth::user()]))->name('dokter.dashboard');
-    Route::get('perawat/dashboard', fn() => view('perawat.dashboard', ['user' => Auth::user()]))->name('perawat.dashboard');
-    Route::get('resepsionis/dashboard', fn() => view('resepsionis.dashboard', ['user' => Auth::user()]))->name('resepsionis.dashboard');
-    Route::get('pemilik/dashboard', fn() => view('pemilik.dashboard', ['user' => Auth::user()]))->name('pemilik.dashboard');
+    Route::get('administrator/dashboard', fn() => view('admin.dashboard', ['user' => Auth::user()]))
+        ->middleware('role:1')->name('administrator.dashboard');
 
+    Route::get('dokter/dashboard', fn() => view('dokter.dashboard', ['user' => Auth::user()]))
+        ->middleware('role:2')->name('dokter.dashboard');
+
+    Route::get('perawat/dashboard', fn() => view('perawat.dashboard', ['user' => Auth::user()]))
+        ->middleware('role:3')->name('perawat.dashboard');
+
+    Route::get('resepsionis/dashboard', [DashboardResepsionisController::class, 'index'])
+    ->middleware('role:4')->name('resepsionis.dashboard');
+
+    Route::get('pemilik/dashboard', fn() => view('pemilik.dashboard', ['user' => Auth::user()]))
+        ->middleware('role:5')->name('pemilik.dashboard');
+
+    Route::prefix('resepsionis')->middleware(['auth', 'role:4'])->name('resepsionis.')->group(function () {
+    // Dashboard
+    Route::get('/', [DashboardResepsionisController::class, 'index'])->name('dashboard');
+
+    // CRUD Pemilik
+    Route::resource('pemilik', PemilikResepsionisController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Pet
+    Route::resource('pet', PetResepsionisController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+    // CRUD Temu Dokter (Reservasi)
+    Route::resource('temu_dokter', TemuDokterController::class);
+});
+
+    // --- Route Khusus Dokter (role:2) ---
+    Route::middleware('role:2')->prefix('dokter')->name('dokter.')->group(function () {
+        
+        // Route Rekam Medis (Hanya View)
+        Route::get('/rekam-medis', [RekamMedisDokterController::class, 'index'])->name('rekamMedis.index');
+        Route::get('/rekam-medis/{id}', [RekamMedisDokterController::class, 'show'])->name('rekamMedis.show');
+        
+        // Route Data Pasien (View Pemilik dan Pet, jika diperlukan)
+        Route::get('/data-pasien', [DataPasienDokterController::class, 'index'])->name('dataPasien.index');
+        
+        // CRUD Detail Rekam Medis (Dilakukan oleh Dokter)
+        Route::prefix('rekam-medis/{idrekam_medis}/detail')->name('rekamMedis.detail.')->group(function () {
+            Route::get('/create', [DetailRekamMedisController::class, 'create'])->name('create');
+            Route::post('/store', [DetailRekamMedisController::class, 'store'])->name('store');
+            // Route::get('/{detailRekamMedi}/edit', [DetailRekamMedisController::class, 'edit'])->name('edit');
+            // Route::put('/{detailRekamMedi}/update', [DetailRekamMedisController::class, 'update'])->name('update');
+            Route::delete('/{detailRekamMedi}/delete', [DetailRekamMedisController::class, 'destroy'])->name('destroy');
+        });
+    });
     
-    Route::prefix('administrator')->name('admin.')->group(function () {
+    Route::middleware('role:1')->prefix('administrator')->name('admin.')->group(function () {
+
         Route::view('/data-master', 'admin.data_master')->name('data.master');
 
         //CRUD Jenis Hewan
@@ -78,12 +131,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/kategori/store', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('/kategori/{id}/update', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/kategori/{id}/delete', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-        
+
+        // CRUD Perawat
         Route::get('/perawat', [PerawatController::class, 'index'])->name('perawat.index');
         Route::post('/perawat/store', [PerawatController::class, 'store'])->name('perawat.store');
         Route::put('/perawat/{id}/update', [PerawatController::class, 'update'])->name('perawat.update');
         Route::delete('/perawat/{id}/delete', [PerawatController::class, 'destroy'])->name('perawat.destroy');
 
+        // CRUD Kategori Klinis
         Route::get('/kategori-klinis', [KategoriKlinisController::class, 'index'])->name('kategoriKlinis.index');
         Route::get('/kategori-klinis/create', [KategoriKlinisController::class, 'create'])->name('kategoriKlinis.create');
         Route::post('/kategori-klinis/store', [KategoriKlinisController::class, 'store'])->name('kategoriKlinis.store');
@@ -96,6 +151,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/pet/store', [PetController::class, 'store'])->name('pet.store');
         Route::put('/pet/{id}/update', [PetController::class, 'update'])->name('pet.update');
         Route::delete('/pet/{id}/delete', [PetController::class, 'destroy'])->name('pet.destroy');
+
         // CRUD Kode Tindakan
         Route::get('/kode-tindakan', [KodeTindakanController::class, 'index'])->name('kode.index');
         Route::get('/kode-tindakan/create', [KodeTindakanController::class, 'create'])->name('kode.create');
@@ -103,26 +159,23 @@ Route::middleware('auth')->group(function () {
         Route::put('/kode-tindakan/{id}/update', [KodeTindakanController::class, 'update'])->name('kode.update');
         Route::delete('/kode-tindakan/{id}/delete', [KodeTindakanController::class, 'destroy'])->name('kode.destroy');
 
+        // CRUD Pemilik
         Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
         Route::get('/pemilik/create', [PemilikController::class, 'create'])->name('pemilik.create');
         Route::post('/pemilik/store', [PemilikController::class, 'store'])->name('pemilik.store');
         Route::put('/pemilik/{id}/update', [PemilikController::class, 'update'])->name('pemilik.update');
         Route::delete('/pemilik/{id}/delete', [PemilikController::class, 'destroy'])->name('pemilik.destroy');
-        
+
+        // CRUD Dokter
         Route::get('/dokter', [DokterController::class, 'index'])->name('dokter.index');
         Route::post('/dokter/store', [DokterController::class, 'store'])->name('dokter.store');
         Route::put('/dokter/{id}/update', [DokterController::class, 'update'])->name('dokter.update');
         Route::delete('/dokter/{id}/delete', [DokterController::class, 'destroy'])->name('dokter.destroy');
 
-       
-        Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
-        Route::get('/kategori-klinis', [KategoriKlinisController::class, 'index'])->name('kategoriKlinis.index');
-        Route::get('/kode-tindakan', [KodeTindakanController::class, 'index'])->name('kode.index');
-        Route::get('/pet', [PetController::class, 'index'])->name('pet.index');
-        Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
     });
 
-    // 🧍‍♂️ Profile
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
