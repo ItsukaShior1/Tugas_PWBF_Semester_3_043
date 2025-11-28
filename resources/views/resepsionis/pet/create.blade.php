@@ -7,7 +7,7 @@
 
     <h2>🐕 Tambah Hewan Peliharaan</h2>
 
-    <a href="{{ route('resepsionis.pet.index') }}" 
+    <a href="{{ route('resepsionis.dashboard') }}" 
        style="background:#999; color:white; padding:8px 12px; border-radius:6px; text-decoration:none;">
        ← Kembali
     </a>
@@ -16,7 +16,7 @@
         @csrf
 
         <label>Nama Hewan:</label>
-        <input type="text" name="nama_hewan" required class="form-control"><br>
+        <input type="text" name="nama" required class="form-control"><br>
 
         <label>Tanggal Lahir:</label>
         <input type="date" name="tanggal_lahir" required class="form-control"><br>
@@ -27,8 +27,8 @@
         <label>Jenis Kelamin:</label>
         <select name="jenis_kelamin" required class="form-control">
             <option value="">-- Pilih --</option>
-            <option value="J">Jantan</option>
-            <option value="B">Betina</option>
+            <option value="Jantan">Jantan</option>
+            <option value="Betina">Betina</option>
         </select><br>
 
         <label>Ras Hewan:</label>

@@ -17,7 +17,7 @@ class PemilikResepsionisController extends Controller
     public function index()
     {
         $pemilik = Pemilik::with('user')->paginate(10); // Gunakan paginasi
-        return view('resepsionis.pemilik.index', compact('pemilik'));
+        return view('resepsionis.pemilik.create', compact('pemilik'));
     }
 
     public function create()
@@ -53,7 +53,7 @@ class PemilikResepsionisController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('resepsionis.pemilik.index')->with('success', 'Pemilik berhasil ditambahkan!');
+            return redirect()->route('resepsionis.dashboard')->with('success', 'Pemilik berhasil ditambahkan!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal menambahkan Pemilik: ' . $e->getMessage());

@@ -4,13 +4,13 @@
 <li class="nav-item">
     <a href="#" class="nav-link">
         <i class="nav-icon bi bi-hospital-fill"></i>
-        <p>Daftar Klinik</p>
+        <p>Daftar Pet</p>
     </a>
 </li>
 <li class="nav-item">
     <a href="#" class="nav-link">
         <i class="nav-icon bi bi-calendar-week-fill"></i>
-        <p>Buat Janji Temu</p>
+        <p>Janji Temu</p>
     </a>
 </li>
 <li class="nav-item">

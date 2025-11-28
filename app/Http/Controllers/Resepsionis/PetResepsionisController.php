@@ -18,7 +18,7 @@ class PetResepsionisController extends Controller
         $ras = RasHewan::with('jenis')->get();
         $pemilik = Pemilik::with('user')->get();
 
-        return view('resepsionis.pet.index', compact('petList', 'ras', 'pemilik'));
+        return view('resepsionis.pet.create', compact('petList', 'ras', 'pemilik'));
     }
 
     public function create()
@@ -31,17 +31,17 @@ class PetResepsionisController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_hewan' => 'required|string|max:150',
+            'nama' => 'required|string|max:150',
             'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:J,B', // J=Jantan, B=Betina
-            'berat' => 'nullable|numeric', 
+            'warna_tanda' => 'nullable|string|max:100', 
+            'jenis_kelamin' => 'required|in:Jantan,Betina', // J=Jantan, B=Betina
             'idras_hewan' => 'required|integer|exists:ras_hewan,idras_hewan',
             'idpemilik' => 'required|integer|exists:pemilik,idpemilik',
         ]);
 
         Pet::create($validated);
 
-        return redirect()->route('resepsionis.pet.index')->with('success', 'Pet berhasil ditambahkan!');
+        return redirect()->route('resepsionis.dashboard')->with('success', 'Pet berhasil ditambahkan!');
     }
     
 
@@ -51,7 +51,7 @@ class PetResepsionisController extends Controller
         $pet = Pet::findOrFail($id);
         $ras = RasHewan::with('jenis')->get();
         $pemilik = Pemilik::with('user')->get();
-        return view('resepsionis.pet.edit', compact('pet', 'ras', 'pemilik'));
+        return view('resepsionis.pet.create', compact('pet', 'ras', 'pemilik'));
     }
 
     public function update(Request $request, $id)
@@ -59,22 +59,22 @@ class PetResepsionisController extends Controller
         $pet = Pet::findOrFail($id);
         
         $validated = $request->validate([
-            'nama_hewan' => 'required|string|max:150',
+            'nama' => 'required|string|max:150',
             'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:J,B', 
-            'berat' => 'nullable|numeric', 
+            'warna_tanda' => 'nullable|string|max:100', 
+            'jenis_kelamin' => 'required|in:Jantan,Betina', // J=Jantan, B=Betina
             'idras_hewan' => 'required|integer|exists:ras_hewan,idras_hewan',
             'idpemilik' => 'required|integer|exists:pemilik,idpemilik',
         ]);
 
         $pet->update($validated);
 
-        return redirect()->route('resepsionis.pet.index')->with('success', 'Data pet berhasil diperbarui!');
+        return redirect()->route('resepsionis.pet.create')->with('success', 'Data pet berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
         Pet::findOrFail($id)->delete();
-        return redirect()->route('resepsionis.pet.index')->with('success', 'Pet berhasil dihapus!');
+        return redirect()->route('resepsionis.dashboard')->with('success', 'Pet berhasil dihapus!');
     }
 }

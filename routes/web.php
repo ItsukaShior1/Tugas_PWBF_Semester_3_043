@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\{
     DokterController,
     PerawatController
 };
+use App\Http\Controllers\KlienController;
 use App\Http\Controllers\Dokter\{RekamMedisDokterController
     ,DetailRekamMedisController,
     DataPasienDokterController    
@@ -27,6 +28,7 @@ use App\Http\Controllers\Resepsionis\{
     PetResepsionisController,
     TemuDokterController
 };
+
 
 require __DIR__.'/auth.php';
 
@@ -99,6 +101,14 @@ Route::middleware('auth')->group(function () {
         });
     });
     
+    Route::middleware('role:5')->prefix('pemilik')->name('pemilik.')->group(function () {
+
+        Route::get('/dashboard', [KlienController::class, 'dashboard'])->name('dashboard');
+        Route::get('/pets', [KlienController::class, 'daftarPet'])->name('daftar_pet');
+        Route::get('/reservasi', [KlienController::class, 'daftarReservasi'])->name('daftar_reservasi');
+        Route::get('/rekam-medis', [KlienController::class, 'daftarRekamMedis'])->name('daftar_rekam_medis');
+    });
+
     Route::middleware('role:1')->prefix('administrator')->name('admin.')->group(function () {
 
         Route::view('/data-master', 'admin.data_master')->name('data.master');
