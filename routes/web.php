@@ -28,7 +28,7 @@ use App\Http\Controllers\Resepsionis\{
     PetResepsionisController,
     TemuDokterController
 };
-
+use App\Http\Controllers\Perawat\{RekamMedisPerawatController,DashboardPerawatController};
 
 require __DIR__.'/auth.php';
 
@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::get('dokter/dashboard', fn() => view('dokter.dashboard', ['user' => Auth::user()]))
         ->middleware('role:2')->name('dokter.dashboard');
 
-    Route::get('perawat/dashboard', fn() => view('perawat.dashboard', ['user' => Auth::user()]))
+    Route::get('perawat/dashboard', [DashboardPerawatController::class, 'index'])
         ->middleware('role:3')->name('perawat.dashboard');
 
     Route::get('resepsionis/dashboard', [DashboardResepsionisController::class, 'index'])
@@ -88,17 +88,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/rekam-medis', [RekamMedisDokterController::class, 'index'])->name('rekamMedis.index');
         Route::get('/rekam-medis/{id}', [RekamMedisDokterController::class, 'show'])->name('rekamMedis.show');
         
-        // Route Data Pasien (View Pemilik dan Pet, jika diperlukan)
+        // Route Data Pasien (View Pemilik dan Pet)
         Route::get('/data-pasien', [DataPasienDokterController::class, 'index'])->name('dataPasien.index');
         
         // CRUD Detail Rekam Medis (Dilakukan oleh Dokter)
         Route::prefix('rekam-medis/{idrekam_medis}/detail')->name('rekamMedis.detail.')->group(function () {
             Route::get('/create', [DetailRekamMedisController::class, 'create'])->name('create');
             Route::post('/store', [DetailRekamMedisController::class, 'store'])->name('store');
-            // Route::get('/{detailRekamMedi}/edit', [DetailRekamMedisController::class, 'edit'])->name('edit');
-            // Route::put('/{detailRekamMedi}/update', [DetailRekamMedisController::class, 'update'])->name('update');
             Route::delete('/{detailRekamMedi}/delete', [DetailRekamMedisController::class, 'destroy'])->name('destroy');
         });
+    });
+
+    Route::middleware('role:3')->prefix('perawat')->name('perawat.')->group(function () {
+        
+        Route::resource('rekam-medis', RekamMedisPerawatController::class);
+
     });
     
     Route::middleware('role:5')->prefix('pemilik')->name('pemilik.')->group(function () {

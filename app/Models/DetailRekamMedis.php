@@ -26,7 +26,7 @@ class DetailRekamMedis extends Model
      *
      * @var string
      */
-    protected $keyType = 'bigInteger';
+
     
     /**
      * 

@@ -37,13 +37,11 @@ Data Hewan Peliharaan
 <!-- /.box-header -->
 <div class="box-body">
 @if ($pets->isEmpty())
-{{-- Menggunakan style AdminLTE/Bootstrap untuk notifikasi kosong --}}
 <div class="callout callout-info text-center">
 <h4><i class="icon fa fa-paw"></i> Tidak Ada Data Pet!</h4>
 <p>Mohon daftarkan hewan peliharaan Anda untuk memulai layanan klinik.</p>
 </div>
 @else
-{{-- Menggunakan class Bootstrap untuk tabel --}}
 <div class="table-responsive">
 <table class="table table-bordered table-hover table-striped">
 <thead>
@@ -63,7 +61,6 @@ Data Hewan Peliharaan
 <tr>
 <td>{{ $pet->idpet }}</td>
 <td>{{ $pet->nama }}</td>
-{{-- Pastikan relasi 'jenisHewan' dan 'ras' tersedia --}}
 <td>{{ $pet->jenisHewan->nama_jenis_hewan ?? 'N/A' }}</td>
 <td>{{ $pet->ras->nama_ras ?? 'N/A' }}</td>
 <td>{{ $pet->jenis_kelamin }}</td>
@@ -72,7 +69,6 @@ Data Hewan Peliharaan
 <td>
 <a href="#" class="btn btn-xs btn-default" title="Detail"><i class="fa fa-eye"></i></a>
 <a href="#" class="btn btn-xs btn-warning" title="Edit"><i class="fa fa-edit"></i></a>
-{{-- Tambahkan form delete di sini --}}
 </td>
 </tr>
 @endforeach

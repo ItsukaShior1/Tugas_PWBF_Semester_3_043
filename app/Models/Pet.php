@@ -11,31 +11,28 @@ class Pet extends Model
 
     protected $table = 'pet';
     protected $primaryKey = 'idpet';
-    public $timestamps = false; // Nonaktifkan timestamps karena tabel pet tidak memilikinya
+    public $timestamps = false;
 
     protected $fillable = [
         'nama',
         'tanggal_lahir',
         'jenis_kelamin',
-        'warna_tanda', // Penting: Ini mengatasi error "Column not found" sebelumnya
-        'idjenis_hewan', // Ditambahkan kembali dari model lama
+        'warna_tanda', 
         'idras_hewan',
         'idpemilik',
     ];
 
-    // Relasi ke Pemilik
     public function pemilik()
     {
         return $this->belongsTo(Pemilik::class, 'idpemilik', 'idpemilik');
     }
 
-    // Relasi ke Ras Hewan
+    
     public function ras()
     {
         return $this->belongsTo(RasHewan::class, 'idras_hewan', 'idras_hewan');
     }
     
-    // Relasi ke Jenis Hewan (Ditambahkan kembali dari model lama)
     public function jenis()
     {
         return $this->belongsTo(JenisHewan::class, 'idjenis_hewan', 'idjenis_hewan');

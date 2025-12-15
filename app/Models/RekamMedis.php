@@ -16,6 +16,8 @@ class RekamMedis extends Model
      *
      * @var string
      */
+
+    
     protected $table = 'rekam_medis';
 
     /**
@@ -28,7 +30,7 @@ class RekamMedis extends Model
      *
      * @var string
      */
-    protected $keyType = 'bigInteger';
+  
     
     /**
      * 
@@ -42,7 +44,7 @@ class RekamMedis extends Model
         'diagnosa',
     ];
 
-    public $timestamps = true; 
+    public $timestamps = false; 
     public function reservasi(): BelongsTo
     {
         return $this->belongsTo(TemuDokter::class, 'idreservasi_dokter', 'idreservasi_dokter');

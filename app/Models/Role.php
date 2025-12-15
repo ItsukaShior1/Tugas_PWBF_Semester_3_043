@@ -13,7 +13,6 @@ class Role extends Model
 
     protected $fillable = ['nama_role'];
 
-    // Relasi ke users via role_user
     public function users()
     {
         return $this->belongsToMany(

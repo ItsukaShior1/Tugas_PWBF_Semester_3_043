@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DetailRekamMedis;
 use App\Models\RekamMedis;
-use App\Models\KodeTindakan; // Menggunakan Model KodeTindakan sesuai konfirmasi
+use App\Models\KodeTindakan;
 
 class DetailRekamMedisController extends Controller
 {
- 
+
     public function create($idrekam_medis)
     {
         $rekam = RekamMedis::findOrFail($idrekam_medis);
         
-        if (optional(Auth::user()->dokter)->iddokter !== $rekam->iddokter_pemeriksa) {
+        if (optional(Auth::user()->dokter)->iddokter !== $rekam->dokter_pemeriksa) {
             return back()->with('error', 'Anda tidak memiliki akses untuk menambah detail pada rekam medis ini.');
         }
 
@@ -30,11 +30,11 @@ class DetailRekamMedisController extends Controller
     {
         $rekam = RekamMedis::findOrFail($idrekam_medis);
         
-        if (optional(Auth::user()->dokter)->iddokter !== $rekam->iddokter_pemeriksa) {
-            return back()->with('error', 'Akses ditolak.');
+        if (optional(Auth::user()->dokter)->iddokter !== $rekam->dokter_pemeriksa) {
+            return back()->with('error', 'Akses ditolak. Anda bukan dokter pemeriksa untuk rekam medis ini.');
         }
 
-        $request->validate([
+        $request->validate(rules: [
             'idkode_tindakan_terapi' => 'required|exists:kode_tindakan_terapi,idkode_tindakan_terapi', 
             'detail' => 'nullable|string|max:1000',
         ]);
@@ -49,13 +49,17 @@ class DetailRekamMedisController extends Controller
                          ->with('success', 'Detail tindakan terapi berhasil ditambahkan.');
     }
     
-
+   
     public function destroy(DetailRekamMedis $detailRekamMedi)
     {
-        $rekam = $detailRekamMedi->rekamMedis;
+        $rekam = $detailRekamMedi->rekamMedis; 
         
-        if (optional(Auth::user()->dokter)->iddokter !== $rekam->iddokter_pemeriksa) {
-            return back()->with('error', 'Akses ditolak.');
+        if (!$rekam) {
+            return back()->with('error', 'Rekam Medis terkait tidak ditemukan.');
+        }
+
+        if (optional(Auth::user()->dokter)->iddokter !== $rekam->dokter_pemeriksa) {
+            return back()->with('error', 'Akses ditolak. Anda bukan dokter pemeriksa untuk detail ini.');
         }
 
         $detailRekamMedi->delete();

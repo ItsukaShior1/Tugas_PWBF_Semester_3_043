@@ -12,7 +12,6 @@ class RasHewan extends Model
 
     protected $fillable = ['idjenis_hewan', 'nama_ras'];
 
-    // Relasi: Ras hewan milik satu jenis hewan
     public function jenis()
     {
         return $this->belongsTo(JenisHewan::class, 'idjenis_hewan', 'idjenis_hewan');

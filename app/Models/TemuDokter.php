@@ -38,4 +38,9 @@ class TemuDokter extends Model
     {
         return $this->belongsTo(Dokter::class, 'iddokter', 'iddokter');
     }
+
+     public function rekamMedis()
+    {
+        return $this->hasOne(RekamMedis::class, 'idreservasi_dokter', 'idreservasi_dokter');
+    }
 }

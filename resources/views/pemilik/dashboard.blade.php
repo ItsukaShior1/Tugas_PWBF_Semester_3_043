@@ -62,21 +62,17 @@ Dashboard Pemilik
 
 <div class="row">
     <div class="col-12">
-        {{-- Pesan Selamat Datang khas AdminLTE --}}
         <div class="alert alert-success alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             <h4><i class="icon fas fa-user-circle"></i> Selamat Datang!</h4>
-            {{-- Gunakan pengecekan untuk $role jika activeRole() mungkin null --}}
             Halo <strong>{{ $user->nama }}</strong>, Anda login sebagai <strong>{{ $role->nama_role ?? 'Klien' }}</strong>. Selamat datang di portal layanan klien!
         </div>
     </div>
 </div>
 
-{{-- Small Boxes for Navigation (Komponen Utama Dashboard) --}}
 <div class="row">
     @foreach ($cards as $card)
         <div class="col-lg-3 col-6">
-            <!-- small box -->
             <div class="small-box {{ $card['bg_class'] }}">
                 <div class="inner">
                     <h3>{{ $card['count'] }}</h3> 
@@ -92,9 +88,7 @@ Dashboard Pemilik
         </div>
     @endforeach
 </div>
-{{-- End Small Boxes --}}
 
-{{-- Konten Tambahan: Aktivitas Terbaru (Placeholder) --}}
 <div class="row">
     <div class="col-md-6">
         <div class="box box-warning">

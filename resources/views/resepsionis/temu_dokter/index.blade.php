@@ -48,7 +48,7 @@
                             <tr>
                                 <td><span class="badge bg-primary">{{ $temu->no_urut }}</span></td>
                                 <td>{{ \Carbon\Carbon::parse($temu->waktu_daftar)->format('d-m-Y H:i') }}</td>
-                                <td>{{ $temu->pet->nama_hewan ?? 'N/A' }}</td>
+                                <td>{{ $temu->pet->nama ?? 'N/A' }}</td>
                                 <td>{{ $temu->pet->pemilik->user->nama ?? 'N/A' }}</td>
                                 <td>{{ $temu->dokter->user->nama ?? 'Belum Ditunjuk' }}</td>
                                 <td>
